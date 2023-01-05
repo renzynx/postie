@@ -1,0 +1,88 @@
+@keyframes pop {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.container {
+  display: inline-flex;
+  flex-shrink: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 0.875rem;
+  line-height: 1em;
+  min-height: 2.5rem;
+  font-weight: 600;
+  text-decoration-line: none;
+  text-transform: uppercase;
+  border-width: 1px;
+  font-family: inherit;
+}
+
+.container:active {
+  animation: pop 0.25s ease-out;
+}
+
+.primary {
+  border-color: #6419e6;
+  background-color: hsla(262, 80%, 50%, 1);
+  color: hsla(0, 0%, 100%, 1);
+}
+
+.primary:hover {
+  background-color: hsl(262, 80%, 40%);
+}
+
+.secondary {
+  border-color: #1fb2a6;
+  background-color: hsla(175, 70%, 41%, 1);
+  color: hsla(0, 0%, 100%, 1);
+}
+
+.secondary:hover {
+  background-color: hsl(175, 70%, 31%);
+}
+
+.error {
+  border-color: hsla(0, 100%, 50%, 1);
+  background-color: hsla(0, 100%, 50%, 1);
+  color: hsla(0, 0%, 100%, 1);
+}
+
+.error:hover {
+  background-color: hsl(0, 100%, 40%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 21px;
+  height: 21px;
+  animation: spin 1s linear infinite;
+}
