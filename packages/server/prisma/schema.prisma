@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?  @unique
-  password  String
-  posts     Post[]
-  profile   Profile?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  username String? @unique
+  password String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   session Session[]
+  posts   Post[]
+  profile Profile?
 
   @@map("users")
 }
@@ -25,8 +26,9 @@ model User {
 model Session {
   id        Int      @id @default(autoincrement())
   sid       String   @unique
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
   expire    DateTime
+  userAgent String   @map("user_agent")
 
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
@@ -35,13 +37,15 @@ model Session {
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String
   content   String?
-  published Boolean @default(false)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId Int
+  authorId Int  @map("author_id")
 
   @@map("posts")
 }
@@ -51,7 +55,7 @@ model Profile {
   bio String?
 
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int  @unique
+  userId Int  @unique @map("user_id")
 
   @@map("profiles")
 }

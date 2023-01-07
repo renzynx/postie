@@ -1,3 +1,4 @@
+import { RootState } from '@app/store';
 import { setCredentials } from '@features/auth/auth.slice';
 import {
   BaseQueryFn,
@@ -12,11 +13,10 @@ const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = (getState() as any).auth.access_token;
+    const access_token = (getState() as RootState).auth.access_token;
 
-    if (data) {
-      headers.set('Authorization', `Bearer ${data.access_token}`);
+    if (access_token) {
+      headers.set('Authorization', `Bearer ${access_token}`);
     }
     return headers;
   },
@@ -36,7 +36,9 @@ export const baseQueryWithAuth: BaseQueryFn<
 
     if (refreshResult?.data) {
       api.dispatch(
-        setCredentials({ ...(refreshResult.data as { access_token: string }) })
+        setCredentials(
+          (refreshResult.data as { access_token: string }).access_token
+        )
       );
 
       result = await baseQuery(args, api, extraOptions);

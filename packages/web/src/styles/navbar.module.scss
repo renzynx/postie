@@ -1,19 +1,20 @@
+@import './sass/variables';
+@import './sass/mixins';
+
 .navbar-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #212121;
+  @include center;
+
+  background: $darker-zinc;
   width: 100%;
-  border-bottom: #2c2c2c solid 1px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  border-bottom: $zinc solid 1px;
+  box-shadow: 0 0 10px 0 $black;
 
   .navbar {
-    display: flex;
+    @include center;
+
     width: 95%;
     margin-left: auto;
     margin-right: auto;
-    justify-content: center;
-    align-items: center;
     padding: 1rem 0;
 
     .navbar-left {
@@ -22,10 +23,10 @@
     }
 
     .navbar-middle {
+      @include center;
+
       flex-grow: 1;
       width: 100%;
-      display: flex;
-      justify-content: center;
     }
 
     .navbar-right {

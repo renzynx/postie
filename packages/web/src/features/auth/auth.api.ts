@@ -1,22 +1,32 @@
 import { apiSlice } from '@app/api/api.slice';
-import { setCredentials, logOut } from './auth.slice';
+import { SessionUser, LoginData, RegisterData } from '@postie/shared-types';
+import { setCredentials, logOut, setUser } from './auth.slice';
 
 export const authApiSlice = apiSlice.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
-    profile: builder.query({
+    profile: builder.query<SessionUser, void>({
       query: () => ({
         url: '/auth/profile',
         method: 'GET',
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
-    login: builder.mutation({
+    login: builder.mutation<{ access_token: string }, LoginData>({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
         body: credentials,
       }),
     }),
-    register: builder.mutation({
+    register: builder.mutation<{ access_token: string }, RegisterData>({
       query: (credentials) => ({
         url: '/auth/register',
         method: 'POST',
@@ -41,15 +51,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    refresh: builder.mutation({
+    refresh: builder.mutation<{ access_token: string }, void>({
       query: () => ({
         url: '/auth/refresh',
         method: 'GET',
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          const { access_token } = data;
+          const {
+            data: { access_token },
+          } = await queryFulfilled;
           dispatch(setCredentials({ access_token }));
         } catch (error) {
           console.log(error);

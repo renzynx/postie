@@ -11,17 +11,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "types": ["jest", "node"],
-    "baseUrl": ".",
-    "paths": {
-      "@postie/ui": ["../ui/src/index.ts"],
-      "@styles/*": ["src/styles/*"],
-      "@pages/*": ["src/components/pages/*"],
-      "@layouts/*": ["src/components/layouts/*"],
-      "@app/*": ["src/app/*"],
-      "@features/*": ["src/features/*"],
-      "@lib/*": ["src/lib/*"]
-    }
+    "types": ["jest", "node"]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
   "exclude": [

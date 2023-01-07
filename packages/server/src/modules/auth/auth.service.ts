@@ -4,15 +4,14 @@ import {
   InternalServerErrorException,
   Logger,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { Payload } from '../../lib/types';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { Payload } from '@postie/shared-types';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +23,27 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {}
 
+  async profile(req: Request) {
+    const cookies = req.cookies;
+
+    const token = cookies?.jwt;
+
+    if (!token) throw new UnauthorizedException();
+
+    const session = await this.prismaService.session.findUnique({
+      where: { sid: token },
+    });
+
+    if (!session) throw new UnauthorizedException();
+
+    if (session.expire < new Date()) {
+      await this.prismaService.session.delete({ where: { sid: token } });
+      throw new UnauthorizedException();
+    }
+
+    return req.user;
+  }
+
   async refresh(req: Request) {
     const cookies = req.cookies;
 
@@ -31,10 +51,16 @@ export class AuthService {
 
     if (!token) throw new UnauthorizedException();
 
-    const payload: Payload = this.jwtService.verify(token, {
-      secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-      issuer: 'postie',
-    });
+    let payload: Payload;
+
+    try {
+      payload = this.jwtService.verify(token, {
+        secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+        issuer: 'postie',
+      });
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
 
     const user = await this.prismaService.findUserById(payload.sub);
 
@@ -66,7 +92,9 @@ export class AuthService {
     return match ? user : null;
   }
 
-  async login(user: User, res: Response) {
+  async login(req: Request, res: Response) {
+    const user = req.user as User;
+
     const payload: Payload = {
       user: {
         username: user.username,
@@ -85,6 +113,15 @@ export class AuthService {
     const refresh_token = this.jwtService.sign(payload, {
       expiresIn: '7d',
       secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
+    });
+
+    await this.prismaService.session.create({
+      data: {
+        userId: user.id,
+        sid: refresh_token,
+        expire: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        userAgent: req.headers['user-agent'] ?? 'Unknown',
+      },
     });
 
     res
@@ -113,7 +150,7 @@ export class AuthService {
         throw new BadRequestException({
           errors: error.meta.target.map((t) => ({
             field: t,
-            message: `${t} is already taken.`,
+            message: `${t.charAt(0).toUpperCase() + t.slice(1)} already taken`,
           })),
         });
       } else {

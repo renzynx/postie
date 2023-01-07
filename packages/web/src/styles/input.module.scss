@@ -1,0 +1,32 @@
+@import './sass/variables';
+@import './sass/keyframes';
+@import './sass/mixins';
+
+.input-container {
+  @include flex(column, nowrap, flex-start, flex-start);
+
+  width: 100%;
+
+  .input {
+    border-radius: 0.5rem;
+    border: none;
+    outline: none;
+    min-height: 2.5rem;
+    padding: 0 0.5rem;
+    width: 100%;
+    resize: none;
+  }
+
+  .input:focus {
+    border: 3px solid $primary;
+    animation: drawborder 0.1s ease-out;
+    margin-top: 0.1rem;
+  }
+
+  .error {
+    color: $red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+}

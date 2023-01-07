@@ -1,0 +1,15 @@
+@import './sass/mixins';
+@import './sass/variables';
+
+.container {
+  @include flex(column, nowrap, center, center);
+  @include mxauto;
+
+  margin-top: $xxl;
+  background: $light-black;
+  gap: $md;
+  padding: $md;
+  border-radius: $sm;
+  width: 95%;
+  height: 100%;
+}

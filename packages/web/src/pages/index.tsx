@@ -1,12 +1,20 @@
+import { useGetPostsQuery } from '@features/posts/posts.api';
+import { useState } from 'react';
 import Navbar from '@layouts/Navbar';
 import Posts from '@layouts/Posts';
 
 export function Index() {
+  const [cursor, setCursor] = useState<number | null>(null);
+  const { data, error, isLoading, isFetching } = useGetPostsQuery({});
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Navbar />
-      <Posts />
-      hello
+      <Posts posts={data} fetching={isFetching} />
     </>
   );
 }

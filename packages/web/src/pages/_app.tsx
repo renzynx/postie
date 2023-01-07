@@ -1,4 +1,4 @@
-import '@styles/globals.scss';
+import '@sass/app.scss';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { store } from '@app/store';

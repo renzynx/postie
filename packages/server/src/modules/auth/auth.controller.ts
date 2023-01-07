@@ -8,7 +8,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '@prisma/client';
 import { Request as ERQ, Response as ERP } from 'express';
 import { JwtGuard } from './guards/jwt.guard';
 import { AuthService } from './auth.service';
@@ -20,13 +19,13 @@ export class AuthController {
   @UseGuards(JwtGuard)
   @Get('profile')
   async profile(@Request() req: ERQ) {
-    return req.user;
+    return this.authService.profile(req);
   }
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req: ERQ, @Response() res: ERP) {
-    return this.authService.login(req.user as User, res);
+    return this.authService.login(req, res);
   }
 
   @Get('refresh')

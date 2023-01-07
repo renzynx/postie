@@ -2,13 +2,11 @@ import styles from '@styles/navbar.module.scss';
 import { Button, Text } from '@postie/ui';
 import { useRouter } from 'next/router';
 import { useProfileQuery } from '@features/auth/auth.api';
+import Link from 'next/link';
 
 const Navbar = () => {
   const router = useRouter();
-
-  const { data } = useProfileQuery({});
-
-  console.log(data);
+  const { data } = useProfileQuery();
 
   return (
     <>
@@ -16,7 +14,9 @@ const Navbar = () => {
         <div className={styles['navbar']}>
           <div className={styles['navbar-left']}>
             <div className={styles['navbar-logo']}>
-              <Text component="h3">Postie</Text>
+              <Link href="/" passHref>
+                <Text component="h3">Postie</Text>
+              </Link>
             </div>
           </div>
           <div className={styles['navbar-middle']}></div>

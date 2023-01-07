@@ -1,0 +1,40 @@
+html {
+  body {
+    background: $black;
+    color: $white;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    font-family: $font;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: $black;
+  border-radius: $sm;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $dimmed;
+  border-radius: $sm;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

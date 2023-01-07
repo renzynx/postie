@@ -5,14 +5,15 @@ export type TextProps = {
   children?: React.ReactNode;
   component?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   color?: 'primary' | 'secondary' | 'error';
+  align?: 'left' | 'center' | 'right';
 } & React.HTMLAttributes<HTMLParagraphElement>;
 
-export function Text(props: TextProps) {
-  const { component = 'p' } = props;
+export function Text({ component = 'p', color, align, ...props }: TextProps) {
   const classNames = [
     styles['typography'],
-    styles[props.color || ''],
+    styles[color || ''],
     props.className,
+    align ? styles[align] : '',
   ];
 
   return React.createElement(

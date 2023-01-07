@@ -1,0 +1,103 @@
+@import './sass/mixins';
+@import './sass/variables';
+
+.posts-container {
+  @include flex(column, nowrap, center, center);
+  @include mxauto;
+
+  width: 95%;
+  margin-top: $lg;
+
+  .post {
+    @include flex(column, nowrap, center, center);
+
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: $light-black;
+    box-shadow: 0 0 10px 0 $black;
+    cursor: pointer;
+
+    .post-header {
+      @include flex(row, nowrap, space-between, center);
+
+      width: 100%;
+      margin-bottom: 1rem;
+
+      .post-author {
+        @include flex(row, nowrap, center, center);
+
+        gap: 0.5rem;
+
+        .author-avatar {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+        }
+
+        .author-name {
+          font-size: medium;
+        }
+      }
+
+      .post-date {
+        font-size: small;
+        color: $dimmed;
+      }
+    }
+
+    .post-title {
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: large;
+    }
+
+    .post-body {
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: medium;
+    }
+
+    .post-footer {
+      @include flex(row, nowrap, space-between, center);
+
+      width: 100%;
+
+      .post-likes {
+        @include flex(row, nowrap, center, center);
+
+        gap: 0.5rem;
+
+        .like-icon {
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          background: $primary;
+        }
+
+        .like-count {
+          font-size: small;
+        }
+      }
+
+      .post-comments {
+        @include flex(row, nowrap, center, center);
+
+        gap: 0.5rem;
+
+        .comment-icon {
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 50%;
+          background: $primary;
+        }
+
+        .comment-count {
+          font-size: small;
+        }
+      }
+    }
+  }
+}

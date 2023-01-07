@@ -1,12 +1,14 @@
 import styles from '@styles/auth.module.scss';
 import { Text } from '@postie/ui';
-import { ErrorMessage, Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import { Button } from '@postie/ui';
 import Link from 'next/link';
 import { useRegisterMutation } from '@features/auth/auth.api';
 import { useRouter } from 'next/router';
 import { setCredentials } from '@features/auth/auth.slice';
 import { useDispatch } from 'react-redux';
+import { toErrorMap } from '@lib/utils';
+import Input from '@layouts/Input';
 
 const RegisterPage = () => {
   const [register, { isLoading }] = useRegisterMutation();
@@ -15,6 +17,12 @@ const RegisterPage = () => {
 
   return (
     <div className={styles['center']}>
+      <Button
+        style={{ position: 'absolute', top: '1rem', left: '1rem' }}
+        color="secondary"
+      >
+        <Link href="/">Home</Link>
+      </Button>
       <Formik
         initialValues={{ email: '', username: '', password: '' }}
         validate={(values) => {
@@ -42,48 +50,43 @@ const RegisterPage = () => {
                 values: { email: '', username: '', password: '' },
               });
               router.push('/', undefined, { shallow: true });
+            })
+            .catch((error) => {
+              setErrors(toErrorMap(error.data.errors));
             });
         }}
       >
         {({ handleSubmit, touched, errors }) => (
-          <form className={styles['form-container']} onSubmit={handleSubmit}>
+          <form
+            autoComplete="off"
+            className={styles['form-container']}
+            onSubmit={handleSubmit}
+          >
             <Text component="h2">Register</Text>
-            <div className={styles['input-container']}>
-              <label htmlFor="username">Username</label>
-              <Field className={styles['input']} name="username" />
-              {touched.username && errors.username && (
-                <ErrorMessage
-                  className={styles['error']}
-                  name="email"
-                  component="div"
-                />
-              )}
-            </div>
-            <div className={styles['input-container']}>
-              <label htmlFor="email">Email</label>
-              <Field className={styles['input']} name="email" />
-              {touched.email && errors.email && (
-                <ErrorMessage
-                  className={styles['error']}
-                  name="email"
-                  component="div"
-                />
-              )}
-            </div>
-            <div className={styles['input-container']}>
-              <label htmlFor="password">Password</label>
-              <Field
-                className={styles['input']}
-                type="password"
-                name="password"
-              />
-
-              <ErrorMessage
-                className={styles['error']}
-                name="password"
-                component="div"
-              />
-            </div>
+            <Input
+              label="Username"
+              name="username"
+              error={
+                touched.username && errors.username
+                  ? errors.username
+                  : undefined
+              }
+            />
+            <Input
+              label="Email"
+              name="email"
+              error={touched.email && errors.email ? errors.email : undefined}
+            />
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              error={
+                touched.password && errors.password
+                  ? errors.password
+                  : undefined
+              }
+            />
             <div className={styles['group']}>
               <Link className={styles['dimmed']} href="/login">
                 Already have an account?

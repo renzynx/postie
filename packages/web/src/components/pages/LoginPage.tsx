@@ -1,6 +1,6 @@
 import styles from '@styles/auth.module.scss';
 import { Text } from '@postie/ui';
-import { ErrorMessage, Field, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { Button } from '@postie/ui';
 import Link from 'next/link';
 import { useLoginMutation } from '@features/auth/auth.api';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from '@features/auth/auth.slice';
 import { toErrorMap } from '@lib/utils';
 import { useRouter } from 'next/router';
+import Input from '@layouts/Input';
 
 const LoginPage = () => {
   const [login, { isLoading }] = useLoginMutation();
@@ -16,6 +17,12 @@ const LoginPage = () => {
 
   return (
     <div className={styles['center']}>
+      <Button
+        style={{ position: 'absolute', top: '1rem', left: '1rem' }}
+        color="secondary"
+      >
+        <Link href="/">Home</Link>
+      </Button>
       <Formik
         initialValues={{ username_email: '', password: '', remember: false }}
         validate={(values) => {
@@ -32,7 +39,7 @@ const LoginPage = () => {
           login(values)
             .unwrap()
             .then((data) => {
-              dispatch(setCredentials({ access_token: data.access_token }));
+              dispatch(setCredentials(data.access_token));
               resetForm({
                 values: { username_email: '', password: '', remember: false },
               });
@@ -44,33 +51,31 @@ const LoginPage = () => {
         }}
       >
         {({ handleSubmit, touched, errors }) => (
-          <form className={styles['form-container']} onSubmit={handleSubmit}>
+          <form
+            autoComplete="off"
+            className={styles['form-container']}
+            onSubmit={handleSubmit}
+          >
             <Text component="h2">Login</Text>
-            <div className={styles['input-container']}>
-              <label htmlFor="username_email">Username or Email</label>
-              <Field className={styles['input']} name="username_email" />
-              {touched.username_email && errors.username_email && (
-                <ErrorMessage
-                  className={styles['error']}
-                  name="username_email"
-                  component="div"
-                />
-              )}
-            </div>
-            <div className={styles['input-container']}>
-              <label htmlFor="password">Password</label>
-              <Field
-                className={styles['input']}
-                type="password"
-                name="password"
-              />
-
-              <ErrorMessage
-                className={styles['error']}
-                name="password"
-                component="div"
-              />
-            </div>
+            <Input
+              label="Username Or Email"
+              name="username_email"
+              error={
+                touched.username_email && errors.username_email
+                  ? errors.username_email
+                  : undefined
+              }
+            />
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              error={
+                touched.password && errors.password
+                  ? errors.password
+                  : undefined
+              }
+            />
             <div className={styles['group']}>
               <div className={styles['checkbox-container']}>
                 <Field
