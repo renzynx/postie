@@ -43,14 +43,14 @@ export class PostsService {
     return posts.map((post) => {
       const content =
         post.content.length > 50
-          ? post.content.slice(0, post.content.lastIndexOf(' ', 50 * 2))
+          ? post.content.slice(0, post.content.lastIndexOf(' ', 50 * 2)) + '...'
           : post.content;
 
       return {
         id: post.id,
         title: post.title,
         published: post.published,
-        content: `${content}...`,
+        content,
         createdAt: post.createdAt,
         author: post.author.username,
       };
@@ -66,13 +66,28 @@ export class PostsService {
   }
 
   async createPost(data: PostArgs) {
-    return this.prismaService.post.create({
+    const post = await this.prismaService.post.create({
       data: {
         title: data.title,
         content: data.content,
         authorId: data.userId,
         published: data.published,
       },
+      include: { author: { select: { username: true } } },
     });
+
+    const content =
+      post.content.length > 50
+        ? post.content.slice(0, post.content.lastIndexOf(' ', 50 * 2)) + '...'
+        : post.content;
+
+    return {
+      id: post.id,
+      title: post.title,
+      published: post.published,
+      content,
+      createdAt: post.createdAt,
+      author: post.author.username,
+    };
   }
 }

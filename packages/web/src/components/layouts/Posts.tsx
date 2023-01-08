@@ -17,7 +17,7 @@ const Posts: React.FC<PostsProps> = ({ fetching, posts }) => {
       ) : (
         <div className={styles['posts-container']}>
           {posts.map((post) => (
-            <DetailedPost key={post.id} post={post} redir />
+            <DetailedPost key={post.id} post={post} withButton />
           ))}
         </div>
       )}

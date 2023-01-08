@@ -3,101 +3,128 @@
 
 .posts-container {
   @include flex(column, nowrap, center, center);
-  @include mxauto;
 
-  width: 95%;
   margin-top: $lg;
+  margin-bottom: $lg;
 
-  .post {
-    @include flex(column, nowrap, center, center);
-
-    width: 100%;
+  .flex {
+    @include flex(row, nowrap, flex-start, center);
+    @include mxauto;
+    width: 95%;
+    margin-top: $lg;
+    background: $light-black;
+    box-shadow: 0 0 10px 0 $black;
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
-    background: $light-black;
-    box-shadow: 0 0 10px 0 $black;
-    cursor: pointer;
 
-    .post-header {
-      @include flex(row, nowrap, space-between, center);
+    gap: $lg;
 
-      width: 100%;
-      margin-bottom: 1rem;
+    .vote {
+      @include flex(column, nowrap, center, center);
+      gap: $xl;
 
-      .post-author {
-        @include flex(row, nowrap, center, center);
-
-        gap: 0.5rem;
-
-        .author-avatar {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 50%;
-        }
-
-        .author-name {
-          font-size: medium;
-        }
+      .like {
+        cursor: pointer;
       }
 
-      .post-date {
-        font-size: small;
-        color: $dimmed;
+      .dislike {
+        cursor: pointer;
       }
     }
 
-    .post-title {
-      width: 100%;
-      margin-bottom: 1rem;
-      font-size: large;
-    }
-
-    .post-body {
-      width: 100%;
-      margin-bottom: 1rem;
-      font-size: medium;
-    }
-
-    .post-footer {
-      @include flex(row, nowrap, space-between, center);
+    .post {
+      @include flex(column, nowrap, center, center);
 
       width: 100%;
+      .post-header {
+        @include flex(row, nowrap, space-between, center);
 
-      .post-likes {
-        @include flex(row, nowrap, center, center);
+        width: 100%;
+        margin-bottom: 1rem;
 
-        gap: 0.5rem;
+        .post-author {
+          @include flex(row, nowrap, center, center);
 
-        .like-icon {
-          width: 1.5rem;
-          height: 1.5rem;
-          border-radius: 50%;
-          background: $primary;
+          gap: 0.5rem;
+
+          .author-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+          }
+
+          .author-name {
+            font-size: medium;
+          }
         }
 
-        .like-count {
+        .post-date {
           font-size: small;
+          color: $dimmed;
         }
       }
 
-      .post-comments {
-        @include flex(row, nowrap, center, center);
-
-        gap: 0.5rem;
-
-        .comment-icon {
-          width: 1.5rem;
-          height: 1.5rem;
-          border-radius: 50%;
-          background: $primary;
-        }
-
-        .comment-count {
-          font-size: small;
-        }
+      .post-title {
+        max-width: 650px;
+        word-break: break-word;
+        margin-bottom: 1rem;
+        font-size: large;
       }
+
+      .divider {
+        width: 100%;
+        height: 1px;
+        background: $divider;
+        margin-bottom: 1rem;
+      }
+
+      .post-body {
+        width: 100%;
+        margin-bottom: 1rem;
+        font-size: medium;
+      }
+
+      // .post-footer {
+      //   @include flex(row, nowrap, space-between, center);
+
+      //   width: 100%;
+
+      //   .post-likes {
+      //     @include flex(row, nowrap, center, center);
+
+      //     gap: 0.5rem;
+
+      //     .like-icon {
+      //       width: 1.5rem;
+      //       height: 1.5rem;
+      //       border-radius: 50%;
+      //       background: $primary;
+      //     }
+
+      //     .like-count {
+      //       font-size: small;
+      //     }
+      //   }
+
+      //   .post-comments {
+      //     @include flex(row, nowrap, center, center);
+
+      //     gap: 0.5rem;
+
+      //     .comment-icon {
+      //       width: 1.5rem;
+      //       height: 1.5rem;
+      //       border-radius: 50%;
+      //       background: $primary;
+      //     }
+
+      //     .comment-count {
+      //       font-size: small;
+      //     }
+      //   }
+      // }
     }
   }
 }

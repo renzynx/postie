@@ -1,10 +1,12 @@
+import { Text } from '@postie/ui';
+
 const CommentSection = () => {
   return (
-    <div>
-      <h1>CommentSection</h1>
-
-      <p>Find me in ./web/src/components/layouts/CommentSection.tsx</p>
-    </div>
+    <>
+      <Text component="h1" align="center" style={{ marginTop: '2rem' }}>
+        This is a comment section. It will be implemented in the future.
+      </Text>
+    </>
   );
 };
 

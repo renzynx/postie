@@ -9,9 +9,10 @@ $blue: #4fc3f7;
 $red: #f87171;
 $darker-zinc: #212121;
 $zinc: #2c2c2c;
-$font: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-  Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
-  Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+$divider: #343437;
+$font: 'Nunito', 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont,
+  Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+  Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 
 $breakpoint-mobile: 768px;
 $breakpoint-tablet: 1024px;
@@ -22,3 +23,8 @@ $md: 1rem;
 $lg: 1.5rem;
 $xl: 2rem;
 $xxl: 3rem;
+
+:export {
+  primary: $primary;
+  darker-zinc: $darker-zinc;
+}

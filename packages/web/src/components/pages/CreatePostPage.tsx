@@ -3,12 +3,14 @@ import Input from '@layouts/Input';
 import Navbar from '@layouts/Navbar';
 import { Button, Text } from '@postie/ui';
 import { Formik } from 'formik';
-import { useCreatePostMutation } from '@features/posts/posts.api';
-import { useSelector } from 'react-redux';
+import { postApiSlice, useCreatePostMutation } from '@features/posts/posts.api';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '@features/auth/auth.slice';
+import { AppDispatch } from '@app/store';
 
 const CreatePostPage = () => {
   const [createPost, { isLoading }] = useCreatePostMutation();
+  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
 
   return (
@@ -24,7 +26,15 @@ const CreatePostPage = () => {
           createPost({ ...values, published: true, userId: user.id })
             .unwrap()
             .then((data) => {
-              console.log(data);
+              dispatch(
+                postApiSlice.util.updateQueryData(
+                  'getPosts',
+                  undefined,
+                  (draft) => {
+                    draft.unshift(data);
+                  }
+                )
+              );
             });
         }}
       >

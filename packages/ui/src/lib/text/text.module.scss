@@ -1,3 +1,5 @@
+@import '../../sass/varibles';
+
 .typography {
   font-family: inherit;
   color: inherit;
@@ -6,15 +8,15 @@
 }
 
 .primary {
-  color: #6419e6;
+  color: $primary;
 }
 
 .secondary {
-  color: #1fb2a6;
+  color: $secondary;
 }
 
 .error {
-  color: #ff0000;
+  color: $red;
 }
 
 .center {

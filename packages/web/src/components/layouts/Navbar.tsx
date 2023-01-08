@@ -15,7 +15,7 @@ const Navbar = () => {
           <div className={styles['navbar-left']}>
             <div className={styles['navbar-logo']}>
               <Link href="/" passHref>
-                <Text component="h3">Postie</Text>
+                <Text component="h2">Postie</Text>
               </Link>
             </div>
           </div>

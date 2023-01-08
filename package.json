@@ -5,7 +5,13 @@
   "scripts": {
     "dev:all": "nx run-many --target=serve --projects=web,server --parallel",
     "dev:server": "nx serve server",
-    "dev:web": "nx serve web"
+    "dev:web": "nx serve web",
+    "start:server": "nx serve server --prod",
+    "start:web": "nx serve web --prod",
+    "start:all": "nx run-many --target=serve --projects=web,server --parallel --prod",
+    "build:server": "nx build server",
+    "build:web": "nx build web",
+    "build:all": "cross-env NX_BRANCH=production nx run-many --target=build --projects=web,server --parallel"
   },
   "private": true,
   "devDependencies": {
@@ -39,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "babel-jest": "28.1.1",
+    "cross-env": "^7.0.3",
     "cypress": "^11.0.0",
     "eslint": "~8.15.0",
     "eslint-config-next": "13.0.0",
@@ -69,6 +76,7 @@
     "@nestjs/schedule": "^2.1.0",
     "@prisma/client": "^4.8.0",
     "@reduxjs/toolkit": "^1.9.1",
+    "@tabler/icons": "^1.119.0",
     "argon2": "^0.30.2",
     "cookie-parser": "^1.4.6",
     "cookies-next": "^2.1.1",
@@ -76,6 +84,7 @@
     "formik": "^2.2.9",
     "helmet": "^6.0.1",
     "next": "13.0.0",
+    "nprogress": "^0.2.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

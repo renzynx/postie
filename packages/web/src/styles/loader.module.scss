@@ -1,11 +1,10 @@
 @import './sass/keyframes';
 @import './sass/variables';
+@import './sass/mixins';
 
-.loader {
-  border: 5px solid $white;
-  border-top: 5px solid $blue;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  animation: spin 1s linear infinite;
+.center {
+  @include flex(column, nowrap, center, center);
+  height: 100vh;
+  width: 100vw;
+  gap: $lg;
 }
