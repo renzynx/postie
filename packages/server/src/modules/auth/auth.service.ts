@@ -102,7 +102,7 @@ export class AuthService {
     delete user.password;
 
     return new Promise((resolve) => {
-      req.login(user, (err) => {
+      req.login({ id: user.id }, (err) => {
         if (err) {
           resolve(false);
         }
