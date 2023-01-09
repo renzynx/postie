@@ -5,15 +5,12 @@ import { Button } from '@postie/ui';
 import Link from 'next/link';
 import { useRegisterMutation } from '@features/auth/auth.api';
 import { useRouter } from 'next/router';
-import { setCredentials } from '@features/auth/auth.slice';
-import { useDispatch } from 'react-redux';
 import { toErrorMap } from '@lib/utils';
 import Input from '@layouts/Input';
 
 const RegisterPage = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const router = useRouter();
-  const dispatch = useDispatch();
 
   return (
     <div className={styles['center']}>
@@ -44,8 +41,7 @@ const RegisterPage = () => {
         onSubmit={(values, { setErrors, resetForm }) => {
           register(values)
             .unwrap()
-            .then((data) => {
-              dispatch(setCredentials({ access_token: data.access_token }));
+            .then(() => {
               resetForm({
                 values: { email: '', username: '', password: '' },
               });

@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PostArgs } from '@postie/shared-types';
-import { AuthGuard } from '../auth/guards/auth.guard';
+import { ProtectedGuard } from '../auth/guards/protected.guard';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -22,7 +22,7 @@ export class PostsController {
     @Query('all') all: string
   ) {
     const realLimit = limit && limit.length ? parseInt(limit) : 10;
-    const realCursor = cursor && cursor.length ? parseInt(cursor) : undefined;
+    const realCursor = cursor && cursor.length ? cursor : undefined;
     const realAll = all && all.length ? all === 'true' : false;
     return this.postService.getPosts({
       cursor: realCursor,
@@ -32,16 +32,11 @@ export class PostsController {
   }
 
   @Get(':id')
-  async findPost(
-    @Param('id', {
-      transform: (value) => parseInt(value, 10),
-    })
-    id: number
-  ) {
+  async findPost(@Param('id') id: string) {
     return this.postService.findPost(id);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(ProtectedGuard)
   @Post('create')
   async createPost(@Body() body: PostArgs) {
     return this.postService.createPost(body);

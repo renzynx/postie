@@ -2,45 +2,42 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Post,
   Request,
   Response,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Request as ERQ, Response as ERP } from 'express';
-import { JwtGuard } from './guards/jwt.guard';
 import { AuthService } from './auth.service';
-
+import { LocalAuthGuard } from './guards/auth.guard';
+import { ProtectedGuard } from './guards/protected.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(JwtGuard)
+  @UseGuards(ProtectedGuard)
   @Get('profile')
   async profile(@Request() req: ERQ) {
     return this.authService.profile(req);
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: ERQ, @Response() res: ERP) {
-    return this.authService.login(req, res);
-  }
-
-  @Get('refresh')
-  async refresh(@Request() req: ERQ) {
-    return this.authService.refresh(req);
+  async login() {
+    return { message: 'Logged in' };
   }
 
   @Post('register')
   async register(
     @Body() body: { username: string; email: string; password: string },
-    @Response() res: ERP
+    @Response() res: ERP,
+    @Request() req: ERQ
   ) {
-    return this.authService.register(body, res);
+    return this.authService.register(body, req, res);
   }
 
+  @UseGuards(ProtectedGuard)
   @Post('logout')
   async logout(@Request() req: ERQ, @Response() res: ERP) {
     return this.authService.logout(req, res);

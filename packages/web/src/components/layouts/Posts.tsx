@@ -4,9 +4,10 @@ import { Posts } from '@postie/shared-types';
 import DetailedPost from './DetailedPost';
 import SkeletonPost from './SkeletonPost';
 import { useGetPostsQuery } from '@features/posts/posts.api';
+import { Text } from '@postie/ui';
 
 const Posts = () => {
-  const [cursor, setCursor] = useState<number | null>(null);
+  const [cursor, setCursor] = useState<string | null>(null);
   const { data, isLoading, isFetching } = useGetPostsQuery({
     limit: 10,
     cursor,
@@ -29,14 +30,20 @@ const Posts = () => {
         ))
       ) : (
         <div className={styles['posts-container']}>
-          {posts.map((post) => (
-            <DetailedPost
-              key={post.id}
-              post={post}
-              withButton
-              idname={post.idname}
-            />
-          ))}
+          {posts.length ? (
+            posts.map((post) => (
+              <DetailedPost
+                key={post.id}
+                post={post}
+                withButton
+                idname={post.idname}
+              />
+            ))
+          ) : (
+            <Text align="center" component="h2">
+              Looks like there are no posts yet. Be the first to create one!
+            </Text>
+          )}
         </div>
       )}
     </>

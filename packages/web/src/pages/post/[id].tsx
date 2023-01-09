@@ -33,7 +33,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const prisma = new PrismaClient();
 
   const p = await prisma.post.findUnique({
-    where: { id: Number(id) },
+    where: { id },
     include: { author: { select: { username: true } } },
   });
 

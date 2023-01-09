@@ -15,6 +15,8 @@ export interface SessionUser {
   id: number;
   username: string;
   email: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface LoginData {
@@ -39,7 +41,7 @@ export interface Payload {
 }
 
 export interface GetPosts {
-  cursor?: number;
+  cursor?: string;
   limit?: number;
 }
 

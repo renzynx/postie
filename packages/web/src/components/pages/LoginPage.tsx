@@ -4,15 +4,12 @@ import { Field, Formik } from 'formik';
 import { Button } from '@postie/ui';
 import Link from 'next/link';
 import { useLoginMutation } from '@features/auth/auth.api';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '@features/auth/auth.slice';
 import { toErrorMap } from '@lib/utils';
 import { useRouter } from 'next/router';
 import Input from '@layouts/Input';
 
 const LoginPage = () => {
   const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
   const router = useRouter();
 
   return (
@@ -39,11 +36,12 @@ const LoginPage = () => {
           login(values)
             .unwrap()
             .then((data) => {
-              dispatch(setCredentials(data.access_token));
-              resetForm({
-                values: { username_email: '', password: '', remember: false },
-              });
-              router.push('/', undefined, { shallow: true });
+              if (data.message) {
+                resetForm({
+                  values: { username_email: '', password: '', remember: false },
+                });
+                router.push('/', undefined, { shallow: true });
+              }
             })
             .catch((error) => {
               setErrors(toErrorMap(error.data.errors));

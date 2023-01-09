@@ -1,12 +1,22 @@
 import styles from '@styles/navbar.module.scss';
 import { Button, Text } from '@postie/ui';
 import { useRouter } from 'next/router';
-import { useProfileQuery } from '@features/auth/auth.api';
+import {
+  authApiSlice,
+  useLogoutMutation,
+  useProfileQuery,
+} from '@features/auth/auth.api';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@app/store';
 
 const Navbar = () => {
   const router = useRouter();
   const { data } = useProfileQuery();
+  const [logout, { isLoading }] = useLogoutMutation();
+  const dispatch = useDispatch<AppDispatch>();
+
+  console.log(data);
 
   return (
     <>
@@ -22,9 +32,22 @@ const Navbar = () => {
           <div className={styles['navbar-middle']}></div>
           <div className={styles['navbar-right']}>
             {data ? (
-              <Button onClick={() => router.push('/create-post')}>
-                Create Post
-              </Button>
+              <>
+                <Button onClick={() => router.push('/create-post')}>
+                  Create Post
+                </Button>
+                <Button
+                  color="error"
+                  loading={isLoading}
+                  onClick={() =>
+                    logout()
+                      .unwrap()
+                      .then(() => dispatch(authApiSlice.util.resetApiState()))
+                  }
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Button onClick={() => router.push('/login')}>Login</Button>

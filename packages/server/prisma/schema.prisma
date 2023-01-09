@@ -16,28 +16,14 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  session Session[]
   posts   Post[]
   profile Profile?
 
   @@map("users")
 }
 
-model Session {
-  id        Int      @id @default(autoincrement())
-  sid       String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  expire    DateTime
-  userAgent String   @map("user_agent")
-
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-
-  @@map("sessions")
-}
-
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   title     String
   content   String?
   published Boolean  @default(false)

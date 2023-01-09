@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PostsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findPost(id: number) {
+  async findPost(id: string) {
     const post = await this.prismaService.post.findUnique({
       where: { id },
       include: { author: { select: { username: true } } },
@@ -64,11 +64,9 @@ export class PostsService {
     };
   }
 
-  async getPost(id: number) {
+  async getPost(id: string) {
     return this.prismaService.post.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 
