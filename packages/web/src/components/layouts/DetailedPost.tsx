@@ -1,5 +1,5 @@
 import styles from '@styles/posts.module.scss';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Image from 'next/image';
 import { Posts } from '@postie/shared-types';
 import { Button, Text } from '@postie/ui';
@@ -9,9 +9,10 @@ import Link from 'next/link';
 const DetailedPost: FC<{
   post: Posts;
   withButton?: boolean;
-}> = ({ post, withButton }) => {
+  idname?: string;
+}> = ({ post, withButton, idname }) => {
   return (
-    <div className={styles['flex']}>
+    <div className={styles['flex']} id={idname}>
       <div className={styles['vote']}>
         <div className={styles['like']}>
           <IconThumbUp size={30} stroke={1.5} />
@@ -48,7 +49,13 @@ const DetailedPost: FC<{
         </div>
         <div className={styles['divider']}></div>
         <div className={styles['post-body']}>
-          <div>{post.content}</div>
+          <div>
+            {post.content.split('\n').map((p, i) => (
+              <Text key={i} component="p">
+                {p}
+              </Text>
+            ))}
+          </div>
         </div>
         {withButton && (
           <Button color="secondary">

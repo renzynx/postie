@@ -6,3 +6,18 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}

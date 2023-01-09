@@ -1,0 +1,85 @@
+@import '../../sass/varibles';
+@import '../../sass/keyframes';
+
+.notification {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  width: 400px;
+  background: $midnight;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.5s backwards;
+
+  @media (max-width: 400px) {
+    width: 95%;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: $darker-zinc;
+    color: $white;
+    font-size: 20px;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+
+    .title {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .close-button:hover {
+        background: $zinc;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+    }
+
+    .description {
+      width: 100%;
+      margin-top: 5px;
+    }
+  }
+}
+
+.primary {
+  border-left: $primary 5px solid;
+
+  .icon {
+    background: $primary;
+  }
+}
+
+.secondary {
+  border-left: $secondary 5px solid;
+
+  .icon {
+    background: $secondary;
+  }
+}
+
+.danger {
+  border-left: $red 5px solid;
+
+  .icon {
+    background: $red;
+  }
+}

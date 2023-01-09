@@ -45,18 +45,13 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   await prisma.$disconnect();
 
-  const content =
-    p.content.length > 50
-      ? p.content.slice(0, p.content.lastIndexOf(' ', 50 * 2)) + '...'
-      : p.content;
-
   const post = {
     id: p.id,
     title: p.title,
     published: p.published,
     createdAt: p.createdAt,
     author: p.author.username,
-    content,
+    content: p.content,
   };
 
   return {

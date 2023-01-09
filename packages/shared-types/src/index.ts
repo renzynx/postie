@@ -50,4 +50,5 @@ export interface Posts {
   content: string;
   createdAt: Date;
   author: string;
+  idname?: string;
 }

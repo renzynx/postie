@@ -1,23 +1,41 @@
-/* eslint-disable @next/next/no-img-element */
 import styles from '@styles/posts.module.scss';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Posts } from '@postie/shared-types';
 import DetailedPost from './DetailedPost';
+import SkeletonPost from './SkeletonPost';
+import { useGetPostsQuery } from '@features/posts/posts.api';
 
-type PostsProps = {
-  posts: Posts[];
-  fetching: boolean;
-};
+const Posts = () => {
+  const [cursor, setCursor] = useState<number | null>(null);
+  const { data, isLoading, isFetching } = useGetPostsQuery({
+    limit: 10,
+    cursor,
+  });
+  const [posts, setPosts] = useState<Posts[]>([]);
 
-const Posts: React.FC<PostsProps> = ({ fetching, posts }) => {
+  useEffect(() => {
+    if (data) {
+      setPosts((prev) => [...prev, ...data.posts]);
+    }
+  }, [data]);
+
   return (
     <>
-      {fetching ? (
-        <div>Loading...</div>
+      {isLoading && isFetching && !posts ? (
+        [...Array(10)].map((_, idx) => (
+          <div key={idx} className={styles['posts-container']}>
+            <SkeletonPost />
+          </div>
+        ))
       ) : (
         <div className={styles['posts-container']}>
           {posts.map((post) => (
-            <DetailedPost key={post.id} post={post} withButton />
+            <DetailedPost
+              key={post.id}
+              post={post}
+              withButton
+              idname={post.idname}
+            />
           ))}
         </div>
       )}

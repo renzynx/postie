@@ -17,7 +17,7 @@ const Input: FC<InputProps> = ({ label, error, textarea, ...props }) => {
         className={styles['input']}
         name={props.name}
         as={textarea ? 'textarea' : 'input'}
-        rows={textarea ? 6 : undefined}
+        rows={textarea ? 10 : undefined}
         style={{ paddingTop: textarea ? '5px' : '0px' }}
         maxLength={textarea ? 500 : undefined}
       />

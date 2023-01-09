@@ -1,0 +1,49 @@
+@import '../styles/sass/mixins';
+
+.like {
+  @include skeleton;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.dislike {
+  @include skeleton;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.date {
+  @include skeleton;
+  width: 100px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.avatar {
+  @include skeleton;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.author {
+  @include skeleton;
+  width: 100px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.title {
+  @include skeleton;
+  width: 200px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.body {
+  @include skeleton;
+  width: 100%;
+  height: 100px;
+}

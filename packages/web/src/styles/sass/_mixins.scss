@@ -1,3 +1,6 @@
+@import 'keyframes';
+@import 'variables';
+
 @mixin center {
   display: flex;
   align-items: center;
@@ -20,4 +23,12 @@
 @mixin mxauto {
   margin-left: auto;
   margin-right: auto;
+}
+
+@mixin skeleton {
+  background: $white;
+  background: linear-gradient(110deg, #eee 8%, #ffffff 18%, #dedede 33%);
+  border-radius: 5px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
 }

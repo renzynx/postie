@@ -25,6 +25,7 @@ export class PostsService {
     }
 
     const { cursor, limit } = data;
+
     const posts = await this.prismaService.post.findMany({
       cursor: cursor ? { id: cursor } : undefined,
       take: limit ?? 10,
@@ -38,23 +39,29 @@ export class PostsService {
       },
     });
 
-    if (!posts.length) return [];
+    const formattedPosts = posts.length
+      ? posts.map((post) => {
+          const content =
+            post.content.length > 50
+              ? post.content.slice(0, post.content.lastIndexOf(' ', 50 * 2)) +
+                '...'
+              : post.content;
 
-    return posts.map((post) => {
-      const content =
-        post.content.length > 50
-          ? post.content.slice(0, post.content.lastIndexOf(' ', 50 * 2)) + '...'
-          : post.content;
+          return {
+            id: post.id,
+            title: post.title,
+            published: post.published,
+            content,
+            createdAt: post.createdAt,
+            author: post.author.username,
+          };
+        })
+      : [];
 
-      return {
-        id: post.id,
-        title: post.title,
-        published: post.published,
-        content,
-        createdAt: post.createdAt,
-        author: post.author.username,
-      };
-    });
+    return {
+      posts: formattedPosts,
+      hasMore: !!posts.length,
+    };
   }
 
   async getPost(id: number) {
