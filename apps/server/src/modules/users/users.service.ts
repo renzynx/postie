@@ -48,7 +48,7 @@ export class UsersService {
     }
 
     //! password will be hashed in prisma middleware
-    //? /packages/server/src/modules/prisma/prisma.service.ts
+    //? /apps/server/src/modules/prisma/prisma.service.ts
     await this.prismaService.user.update({
       where: { id: user.id },
       data: { password: data.password },

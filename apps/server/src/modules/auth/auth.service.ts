@@ -82,7 +82,7 @@ export class AuthService {
     const username = input.username ?? generateFromEmail(email);
     try {
       //! password will be hashed in prisma middleware
-      //? /packages/server/src/modules/prisma/prisma.service.ts
+      //? /apps/server/src/modules/prisma/prisma.service.ts
       const user = await this.prismaService.user.create({
         data: { username, email, password },
       });
