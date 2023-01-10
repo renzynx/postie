@@ -12,6 +12,8 @@ import * as RedisStore from 'connect-redis';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { Redis } from 'ioredis';
+import { UsersModule } from './modules/users/users.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { Redis } from 'ioredis';
     PrismaModule,
     PostsModule,
     RedisModule,
+    UsersModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

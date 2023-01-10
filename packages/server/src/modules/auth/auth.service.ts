@@ -11,6 +11,7 @@ import * as argon from 'argon2';
 import { Request, Response } from 'express';
 import { REDIS } from '../redis/redis.constant';
 import { Redis } from 'ioredis';
+import { generateFromEmail } from 'unique-username-generator';
 
 @Injectable()
 export class AuthService {
@@ -73,15 +74,30 @@ export class AuthService {
   }
 
   async register(
-    input: { username: string; email: string; password: string },
+    input: { username?: string; email: string; password: string },
     req: Request,
     res: Response
   ) {
-    const { username, email, password } = input;
-    let user;
+    const { email, password } = input;
+    const username = input.username ?? generateFromEmail(email);
     try {
-      user = await this.prismaService.user.create({
+      //! password will be hashed in prisma middleware
+      //? /packages/server/src/modules/prisma/prisma.service.ts
+      const user = await this.prismaService.user.create({
         data: { username, email, password },
+      });
+      delete user.password;
+
+      return new Promise((resolve) => {
+        req.login({ id: user.id }, (err) => {
+          if (err) {
+            resolve(false);
+          }
+
+          resolve(true);
+
+          res.end();
+        });
       });
     } catch (error) {
       if (error.code === 'P2002') {
@@ -98,20 +114,6 @@ export class AuthService {
         throw new InternalServerErrorException();
       }
     }
-
-    delete user.password;
-
-    return new Promise((resolve) => {
-      req.login({ id: user.id }, (err) => {
-        if (err) {
-          resolve(false);
-        }
-
-        resolve(true);
-
-        res.end();
-      });
-    });
   }
 
   async logout(req: Request, res: Response) {

@@ -28,7 +28,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
     this.$use(async (params: Prisma.MiddlewareParams, next) => {
       if (params.model === 'User') {
-        if (params.action === 'create' || params.action === 'update') {
+        if (
+          params.action === 'create' ||
+          (params.action === 'update' && params.args.data.password)
+        ) {
           params.args.data.password = await argon.hash(
             params.args.data.password
           );
