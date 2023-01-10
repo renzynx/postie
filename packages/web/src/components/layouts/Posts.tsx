@@ -22,8 +22,8 @@ const Posts = () => {
 
   return (
     <>
-      {isLoading && isFetching && !posts ? (
-        [...Array(10)].map((_, idx) => (
+      {isLoading || isFetching || !posts || !data.posts ? (
+        [...Array(3)].map((_, idx) => (
           <div key={idx} className={styles['posts-container']}>
             <SkeletonPost />
           </div>
