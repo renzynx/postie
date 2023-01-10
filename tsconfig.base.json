@@ -23,8 +23,8 @@
       "@postie/server/*": ["packages/server/src/*"],
       "@postie/shared-types": ["packages/shared-types/src/index.ts"],
       "@postie/ui": ["packages/ui/src/index.ts"],
-      "@styles/*": ["packages/web/src/styles/*"],
-      "@sass/*": ["packages/web/src/styles/sass/*"]
+      "@sass/*": ["packages/web/src/styles/sass/*"],
+      "@styles/*": ["packages/web/src/styles/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
