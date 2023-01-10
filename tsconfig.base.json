@@ -15,16 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["packages/web/src/app/*"],
-      "@features/*": ["packages/web/src/features/*"],
-      "@layouts/*": ["packages/web/src/components/layouts/*"],
-      "@lib/*": ["packages/web/src/lib/*"],
-      "@pages/*": ["packages/web/src/components/pages/*"],
-      "@postie/server/*": ["packages/server/src/*"],
-      "@postie/shared-types": ["packages/shared-types/src/index.ts"],
+      "@app/*": ["apps/web/src/app/*"],
+      "@features/*": ["apps/web/src/features/*"],
+      "@layouts/*": ["apps/web/src/components/layouts/*"],
+      "@lib/*": ["apps/web/src/lib/*"],
+      "@pages/*": ["apps/web/src/components/pages/*"],
+      "@sass/*": ["apps/web/src/styles/sass/*"],
+      "@styles/*": ["apps/web/src/styles/*"],
+      "@postie/server/*": ["apps/server/src/*"],
       "@postie/ui": ["packages/ui/src/index.ts"],
-      "@sass/*": ["packages/web/src/styles/sass/*"],
-      "@styles/*": ["packages/web/src/styles/*"]
+      "@postie/shared-types": ["packages/shared-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
