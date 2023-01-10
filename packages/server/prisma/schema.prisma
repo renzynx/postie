@@ -8,13 +8,12 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  username String? @unique
-  password String
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String?   @unique
+  password  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  verified  DateTime? @map("verified_at")
 
   posts   Post[]
   profile Profile?
