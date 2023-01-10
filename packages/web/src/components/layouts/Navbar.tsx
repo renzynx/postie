@@ -16,8 +16,6 @@ const Navbar = () => {
   const [logout, { isLoading }] = useLogoutMutation();
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log(data);
-
   return (
     <>
       <div className={styles['navbar-container']}>
