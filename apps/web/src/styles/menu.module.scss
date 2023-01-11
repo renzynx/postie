@@ -1,0 +1,41 @@
+@import './sass/mixins';
+@import './sass/variables';
+@import './sass/keyframes';
+
+.menu {
+  @include flex(row, nowrap, center, center);
+  position: relative;
+
+  .menu-dropdown {
+    @include flex(column, nowrap, space-between, center);
+    gap: $sm;
+    position: absolute;
+    top: 150%;
+    right: -5px;
+    background: $medium-zinc;
+    padding: $sm;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    animation: menu-dropdown 0.2s ease-in-out;
+    z-index: 1;
+
+    .menu-title {
+      p {
+        font-size: medium;
+        font-weight: 600;
+      }
+    }
+
+    .divider {
+      width: 100%;
+      height: 0.5px;
+      background: $zinc;
+    }
+
+    .menu-item {
+      @include flex(column, nowrap, center, center);
+      gap: $sm;
+      margin-top: 5px;
+    }
+  }
+}

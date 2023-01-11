@@ -35,6 +35,15 @@
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
+
+      .navbar-avatar-container {
+        @include flex(row, nowrap, center, center);
+
+        .navbar-avatar {
+          border-radius: 50%;
+          outline: $medium-zinc solid 2px;
+        }
+      }
     }
 
     .navbar-links {
