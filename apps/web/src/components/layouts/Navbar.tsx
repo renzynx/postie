@@ -9,12 +9,16 @@ import {
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@app/store';
+import Menu from './Menu';
+import { useState } from 'react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const router = useRouter();
-  const { data } = useProfileQuery();
+  const { data, isError } = useProfileQuery();
   const [logout, { isLoading }] = useLogoutMutation();
   const dispatch = useDispatch<AppDispatch>();
+  const [opened, setOpened] = useState(false);
 
   return (
     <>
@@ -29,22 +33,46 @@ const Navbar = () => {
           </div>
           <div className={styles['navbar-middle']}></div>
           <div className={styles['navbar-right']}>
-            {data ? (
+            {data && !isError ? (
               <>
-                <Button onClick={() => router.push('/create-post')}>
-                  Create Post
-                </Button>
-                <Button
-                  color="error"
-                  loading={isLoading}
-                  onClick={() =>
-                    logout()
-                      .unwrap()
-                      .then(() => dispatch(authApiSlice.util.resetApiState()))
+                <Menu
+                  title={data.username}
+                  open={opened}
+                  setOpened={setOpened}
+                  target={
+                    <div
+                      className={styles['navbar-avatar-container']}
+                      onClick={() => setOpened(!opened)}
+                    >
+                      <Image
+                        className={styles['navbar-avatar']}
+                        src={`https://avatars.dicebear.com/api/identicon/${data.username}.svg`}
+                        alt="avatar"
+                        width={32}
+                        height={32}
+                      />
+                    </div>
                   }
                 >
-                  Logout
-                </Button>
+                  <Button
+                    onClick={() => router.push('/create-post')}
+                    style={{ width: '10rem' }}
+                  >
+                    Create Post
+                  </Button>
+                  <Button
+                    style={{ width: '10rem' }}
+                    color="error"
+                    loading={isLoading}
+                    onClick={() =>
+                      logout()
+                        .unwrap()
+                        .then(() => dispatch(authApiSlice.util.resetApiState()))
+                    }
+                  >
+                    Logout
+                  </Button>
+                </Menu>
               </>
             ) : (
               <>
