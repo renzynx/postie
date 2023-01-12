@@ -46,11 +46,13 @@ export interface GetPosts {
 }
 
 export interface Posts {
-  id: number;
+  id: string;
   title: string;
   published: boolean;
   content: string;
   createdAt: Date;
   author: string;
-  idname?: string;
+  currentUserVoted: number | null;
+  likes: number;
+  dislikes: number;
 }

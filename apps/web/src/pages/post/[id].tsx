@@ -1,18 +1,37 @@
 import styles from '@styles/posts.module.scss';
 import Navbar from '@layouts/Navbar';
-import { GetStaticPropsContext } from 'next';
-import { FC } from 'react';
 import DetailedPost from '@layouts/DetailedPost';
 import CommentSection from '@layouts/CommentSection';
-import { PrismaClient } from '@prisma/client';
-import { Posts } from '@postie/shared-types';
+import { useFindPostQuery } from '@features/posts/posts.api';
+import { useRouter } from 'next/router';
+import LoadingPage from '@pages/LoadingPage';
+import Error from 'next/error';
+import SkeletonPost from '@layouts/SkeletonPost';
 
-const DetailPost: FC<{ post: Posts }> = ({ post }) => {
+const DetailPost = () => {
+  const router = useRouter();
+  const id = router.query.id as string;
+  const { isLoading, data, isError } = useFindPostQuery(id, {
+    skip: !id,
+  });
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  if (isError || !data) {
+    return <Error statusCode={404} />;
+  }
+
   return (
     <>
       <Navbar />
       <div className={styles['posts-container']}>
-        <DetailedPost post={post} />
+        {isLoading || router.isFallback ? (
+          <SkeletonPost />
+        ) : (
+          <DetailedPost post={data} />
+        )}
         <CommentSection />
       </div>
     </>
@@ -20,59 +39,3 @@ const DetailPost: FC<{ post: Posts }> = ({ post }) => {
 };
 
 export default DetailPost;
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-  const { id } = context.params as Record<string, string>;
-
-  if (!id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const prisma = new PrismaClient();
-
-  const p = await prisma.post.findUnique({
-    where: { id },
-    include: { author: { select: { username: true } } },
-  });
-
-  if (!p) {
-    return {
-      notFound: true,
-    };
-  }
-
-  await prisma.$disconnect();
-
-  const post = {
-    id: p.id,
-    title: p.title,
-    published: p.published,
-    createdAt: p.createdAt,
-    author: p.author.username,
-    content: p.content,
-  };
-
-  return {
-    // nextjs scalar types fix
-    props: { post: JSON.parse(JSON.stringify(post)) },
-    revalidate: 10,
-  };
-}
-
-export async function getStaticPaths() {
-  const prisma = new PrismaClient();
-
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-  });
-
-  const paths = posts.map((post) => ({
-    params: { id: post.id.toString() },
-  }));
-
-  await prisma.$disconnect();
-
-  return { paths, fallback: 'blocking' };
-}
