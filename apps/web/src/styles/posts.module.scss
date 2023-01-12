@@ -29,8 +29,18 @@
         cursor: pointer;
       }
 
+      .like-active {
+        cursor: pointer;
+        color: $primary;
+      }
+
       .dislike {
         cursor: pointer;
+      }
+
+      .dislike-active {
+        cursor: pointer;
+        color: $red;
       }
     }
 
@@ -84,6 +94,7 @@
         width: 100%;
         margin-bottom: 1rem;
         font-size: medium;
+        word-break: break-word;
       }
 
       // .post-footer {

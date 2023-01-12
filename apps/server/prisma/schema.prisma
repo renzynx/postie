@@ -16,6 +16,7 @@ model User {
   verified  DateTime? @map("verified_at")
 
   posts   Post[]
+  votes   Vote[]
   profile Profile?
 
   @@map("users")
@@ -24,15 +25,30 @@ model User {
 model Post {
   id        String   @id @default(uuid())
   title     String
-  content   String?
+  content   String
   published Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
-  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId Int  @map("author_id")
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int    @map("author_id")
+  votes    Vote[]
 
   @@map("posts")
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  value     Int      @default(1) // 1 or -1 for like or dislike
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id")
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("user_id")
+
+  @@unique([postId, userId])
+  @@map("votes")
 }
 
 model Profile {

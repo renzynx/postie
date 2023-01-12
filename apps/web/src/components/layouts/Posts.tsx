@@ -1,28 +1,18 @@
 import styles from '@styles/posts.module.scss';
-import { useEffect, useState } from 'react';
-import { Posts } from '@postie/shared-types';
 import DetailedPost from './DetailedPost';
 import SkeletonPost from './SkeletonPost';
 import { useGetPostsQuery } from '@features/posts/posts.api';
 import { Text } from '@postie/ui';
+import { useSelector } from 'react-redux';
+import { selectPagination } from '@features/posts/pagination.slice';
 
 const Posts = () => {
-  const [cursor, setCursor] = useState<string | null>(null);
-  const { data, isLoading, isFetching } = useGetPostsQuery({
-    limit: 10,
-    cursor,
-  });
-  const [posts, setPosts] = useState<Posts[]>([]);
-
-  useEffect(() => {
-    if (data) {
-      setPosts((prev) => [...prev, ...data.posts]);
-    }
-  }, [data]);
+  const pagination = useSelector(selectPagination);
+  const { data, isLoading, isFetching } = useGetPostsQuery(pagination);
 
   return (
     <>
-      {isLoading || isFetching || !posts || !data.posts ? (
+      {isFetching || (!data?.posts && isLoading) ? (
         [...Array(3)].map((_, idx) => (
           <div key={idx} className={styles['posts-container']}>
             <SkeletonPost />
@@ -30,14 +20,9 @@ const Posts = () => {
         ))
       ) : (
         <div className={styles['posts-container']}>
-          {posts.length ? (
-            posts.map((post) => (
-              <DetailedPost
-                key={post.id}
-                post={post}
-                withButton
-                idname={post.idname}
-              />
+          {data?.posts.length ? (
+            data.posts.map((post) => (
+              <DetailedPost key={post.id} post={post} withButton />
             ))
           ) : (
             <Text align="center" component="h2">

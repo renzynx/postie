@@ -29,7 +29,7 @@ const Menu: FC<MenuProps> = ({ title, children, open, target, setOpened }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [open]);
+  }, [open, setOpened]);
 
   return (
     <>
