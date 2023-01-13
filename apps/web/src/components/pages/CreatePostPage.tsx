@@ -3,10 +3,9 @@ import Input from '@layouts/Input';
 import Navbar from '@layouts/Navbar';
 import { Button, Text } from '@postie/ui';
 import { Formik } from 'formik';
-import { postApiSlice, useCreatePostMutation } from '@features/posts/posts.api';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCreatePostMutation } from '@features/posts/posts.api';
+import { useSelector } from 'react-redux';
 import { selectUser } from '@features/auth/auth.slice';
-import { AppDispatch } from '@app/store';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 const Notification = dynamic(
@@ -16,7 +15,6 @@ const Notification = dynamic(
 
 const CreatePostPage = () => {
   const [createPost, { isLoading }] = useCreatePostMutation();
-  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector(selectUser);
   const [open, setOpen] = useState(false);
 
@@ -49,18 +47,9 @@ const CreatePostPage = () => {
         onSubmit={(values, { resetForm }) => {
           createPost({ ...values, published: true, userId: user.id })
             .unwrap()
-            .then((data) => {
+            .then(() => {
               resetForm();
               setOpen(true);
-              dispatch(
-                postApiSlice.util.updateQueryData(
-                  'getPosts',
-                  undefined,
-                  (draft) => {
-                    draft.posts.unshift(data);
-                  }
-                )
-              );
             });
         }}
       >
