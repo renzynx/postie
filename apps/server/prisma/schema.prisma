@@ -23,10 +23,11 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   title     String
   content   String
   published Boolean  @default(false)
+  uuid      String   @unique @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
 
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -41,7 +42,7 @@ model Vote {
   value     Int      @default(1) // 1 or -1 for like or dislike
   createdAt DateTime @default(now()) @map("created_at")
 
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post   Post   @relation(fields: [postId], references: [uuid], onDelete: Cascade)
   postId String @map("post_id")
 
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)

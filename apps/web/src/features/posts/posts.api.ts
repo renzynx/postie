@@ -10,11 +10,21 @@ export const postApiSlice = apiSlice.injectEndpoints({
         url: `/posts?cursor=${cursor ?? ''}&limit=${limit ?? ''}`,
         method: 'GET',
       }),
-      merge: (existing, incoming) => {
-        return {
-          posts: [...(existing?.posts ?? []), ...incoming.posts],
-          hasMore: incoming.hasMore,
-        };
+      providesTags: ['Post'],
+      async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
+        // get the previous posts
+        const { posts: previousPosts } = (getState() as RootState).post;
+        const { posts, hasMore } = await (await queryFulfilled).data;
+
+        if (posts.length === 0 && hasMore === false) {
+          return;
+        }
+
+        dispatch(
+          postApiSlice.util.updateQueryData('getPosts', args, (draft) => {
+            draft.posts = [...(previousPosts ?? []), ...posts];
+          })
+        );
       },
     }),
     findPost: builder.query<Posts, string>({
@@ -29,6 +39,22 @@ export const postApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body,
       }),
+      onQueryStarted: (_, { dispatch, queryFulfilled, getState }) => {
+        queryFulfilled.then((result) => {
+          if (result.data) {
+            const { cursor, limit } = (getState() as RootState).pagination;
+            dispatch(
+              postApiSlice.util.updateQueryData(
+                'getPosts',
+                { cursor, limit },
+                (draft) => {
+                  draft.posts.unshift(result.data);
+                }
+              )
+            );
+          }
+        });
+      },
     }),
     votePost: builder.mutation<boolean, { postId: string; value: number }>({
       query: (body) => ({
@@ -43,14 +69,14 @@ export const postApiSlice = apiSlice.injectEndpoints({
       ) => {
         queryFulfilled.then((result) => {
           if (result.data) {
-            const { pagination } = getState() as RootState;
+            const { cursor, limit } = (getState() as RootState).pagination;
             dispatch(
               postApiSlice.util.updateQueryData('findPost', postId, (draft) => {
                 if (value === 1) {
                   draft.likes++;
-                  draft.dislikes--;
+                  draft.dislikes !== 0 && draft.dislikes--;
                 } else {
-                  draft.likes--;
+                  draft.likes !== 0 && draft.likes--;
                   draft.dislikes++;
                 }
                 draft.currentUserVoted = value;
@@ -59,15 +85,16 @@ export const postApiSlice = apiSlice.injectEndpoints({
             dispatch(
               postApiSlice.util.updateQueryData(
                 'getPosts',
-                pagination,
+                { cursor, limit },
                 (draft) => {
-                  const post = draft.posts.find((p) => p.id === postId);
+                  const post = draft.posts.find((p) => p.uuid === postId);
+
                   if (post) {
                     if (value === 1) {
                       post.likes++;
-                      post.dislikes--;
+                      post.dislikes !== 0 && post.dislikes--;
                     } else {
-                      post.likes--;
+                      post.likes !== 0 && post.likes--;
                       post.dislikes++;
                     }
                     post.currentUserVoted = value;

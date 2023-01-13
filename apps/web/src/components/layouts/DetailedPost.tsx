@@ -48,7 +48,7 @@ const DetailedPost: FC<{
                 }
 
                 vote({
-                  postId: post.id,
+                  postId: post.uuid,
                   value: 1,
                 })
                   .unwrap()
@@ -72,7 +72,7 @@ const DetailedPost: FC<{
               }
 
               vote({
-                postId: post.id,
+                postId: post.uuid,
                 value: -1,
               })
                 .unwrap()
@@ -127,7 +127,7 @@ const DetailedPost: FC<{
           </div>
           {withButton && (
             <Button color="secondary">
-              <Link href={`/post/${post.id}`}>Go to post</Link>
+              <Link href={`/post/${post.uuid}`}>Go to post</Link>
             </Button>
           )}
         </div>

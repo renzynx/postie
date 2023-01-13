@@ -2,7 +2,7 @@ import { RootState } from '@app/store';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface PaginationState {
-  cursor: string | null;
+  cursor: number | null;
   limit: number;
 }
 
@@ -12,7 +12,7 @@ const paginationSlice = createSlice({
   name: 'pagination',
   initialState,
   reducers: {
-    setPagination(state, action) {
+    setPagination: (state, action) => {
       state.cursor = action.payload.cursor;
       state.limit = action.payload.limit;
     },

@@ -11,13 +11,13 @@ import { Request } from 'express';
 export class PostsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findPost(id: string, req: Request) {
-    if (!id) {
+  async findPost(uuid: string, req: Request) {
+    if (!uuid) {
       throw new BadRequestException();
     }
 
     const p = await this.prismaService.post.findUnique({
-      where: { id },
+      where: { uuid },
       include: {
         author: {
           select: {
@@ -62,15 +62,12 @@ export class PostsService {
     };
   }
 
-  async getPosts(data: GetPosts & { all: boolean }, req: Request) {
-    if (data.all) {
-      return this.prismaService.post.findMany();
-    }
-
+  async getPosts(data: GetPosts, req: Request) {
     const { cursor, limit } = data;
 
     const posts = await this.prismaService.post.findMany({
       cursor: cursor ? { id: cursor } : undefined,
+      skip: 1,
       take: limit ?? 10,
       orderBy: { createdAt: 'desc' },
       include: {
@@ -112,6 +109,7 @@ export class PostsService {
             id: post.id,
             title: post.title,
             published: post.published,
+            uuid: post.uuid,
             content,
             createdAt: post.createdAt,
             author: post.author.username,
@@ -124,14 +122,8 @@ export class PostsService {
 
     return {
       posts: formattedPosts,
-      hasMore: !!posts.length,
+      hasMore: formattedPosts.length === (limit ?? 10),
     };
-  }
-
-  async getPost(id: string) {
-    return this.prismaService.post.findUnique({
-      where: { id },
-    });
   }
 
   async createPost(data: PostArgs) {
@@ -161,16 +153,16 @@ export class PostsService {
   }
 
   async votePost({
-    postId,
+    postUUID,
     userId,
     value,
   }: {
     userId: number;
-    postId: string;
+    postUUID: string;
     value: number;
   }) {
     const post = await this.prismaService.post.findUnique({
-      where: { id: postId },
+      where: { uuid: postUUID },
     });
 
     if (!post) {
@@ -178,9 +170,8 @@ export class PostsService {
     }
 
     const vote = await this.prismaService.vote.findUnique({
-      where: { postId_userId: { postId, userId } },
+      where: { postId_userId: { postId: postUUID, userId } },
     });
-
     if (vote && vote.value === value) {
       throw new BadRequestException('Already voted');
     }
@@ -189,12 +180,12 @@ export class PostsService {
       ? await this.prismaService.vote.create({
           data: {
             user: { connect: { id: userId } },
-            post: { connect: { id: postId } },
+            post: { connect: { uuid: postUUID } },
             value,
           },
         })
       : await this.prismaService.vote.update({
-          where: { postId_userId: { postId, userId } },
+          where: { postId_userId: { postId: postUUID, userId } },
           data: { value },
         });
 

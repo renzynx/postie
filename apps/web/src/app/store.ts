@@ -4,12 +4,14 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { useDispatch } from 'react-redux';
 import authReducer from '@features/auth/auth.slice';
 import paginationReducer from '@features/posts/pagination.slice';
+import postReducer from '@features/posts/post.slice';
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
     pagination: paginationReducer,
+    post: postReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

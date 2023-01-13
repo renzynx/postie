@@ -21,17 +21,14 @@ export class PostsController {
   async getPosts(
     @Query('cursor') cursor: string,
     @Query('limit') limit: string,
-    @Query('all') all: string,
     @Request() req: ERQ
   ) {
-    const realLimit = limit && limit.length ? parseInt(limit) : 10;
-    const realCursor = cursor && cursor.length ? cursor : undefined;
-    const realAll = all && all.length ? all === 'true' : false;
+    const realLimit = limit ? +limit : 10;
+    const realCursor = cursor ? +cursor : undefined;
     return this.postService.getPosts(
       {
         cursor: realCursor,
         limit: realLimit,
-        all: realAll,
       },
       req
     );
@@ -55,7 +52,7 @@ export class PostsController {
     @Request() req: ERQ
   ) {
     return this.postService.votePost({
-      postId: body.postId,
+      postUUID: body.postId,
       value: body.value,
       userId: (req.user as { id: number }).id,
     });

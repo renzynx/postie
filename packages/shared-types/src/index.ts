@@ -41,14 +41,15 @@ export interface Payload {
 }
 
 export interface GetPosts {
-  cursor?: string;
+  cursor?: number;
   limit?: number;
 }
 
 export interface Posts {
-  id: string;
+  id: number;
   title: string;
   published: boolean;
+  uuid: string;
   content: string;
   createdAt: Date;
   author: string;
