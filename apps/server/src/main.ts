@@ -6,7 +6,7 @@ import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const globalPrefix = 'api';
+  const GLOBAL_PREFIX = 'api';
   app.enableCors({
     credentials: true,
     origin: process.env.CORS_ORIGIN,
@@ -23,13 +23,13 @@ async function bootstrap() {
       },
     })
   );
-  app.setGlobalPrefix(globalPrefix);
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   const port = process.env.PORT || 3333;
   await app.listen(port);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
+    `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`,
     'Bootstrap'
   );
 }
 
-bootstrap();
+bootstrap().then(() => {});

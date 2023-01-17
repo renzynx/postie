@@ -1,4 +1,4 @@
-import { User, Post } from '@prisma/client';
+import { Post, User } from '@prisma/client';
 
 export type UserWithoutPassword = Omit<User, 'password'>;
 
@@ -17,6 +17,7 @@ export interface SessionUser {
   email: string;
   createdAt: Date;
   updatedAt: Date;
+  verified: Date;
 }
 
 export interface LoginData {

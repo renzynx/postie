@@ -40,7 +40,7 @@ export class AuthService {
 
     const result = JSON.stringify(puser);
 
-    await this.redis.set(`user:${user.id}`, result, 'EX', 60 * 60 * 24 * 7);
+    await this.redis.set(`user:${user.id}`, result, 'EX', 60 * 60 * 24);
 
     return puser;
   }

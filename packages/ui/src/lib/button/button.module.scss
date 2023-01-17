@@ -7,6 +7,10 @@
   }
 }
 
+.container:disabled:active {
+  animation: none;
+}
+
 .container {
   display: inline-flex;
   flex-shrink: 0;
@@ -18,8 +22,8 @@
   justify-content: center;
   text-align: center;
   transition-property: color, background-color, border-color,
-    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
-    backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+  text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+  backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 0.3rem;

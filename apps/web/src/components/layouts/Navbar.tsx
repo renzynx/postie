@@ -55,6 +55,12 @@ const Navbar = () => {
                   }
                 >
                   <Button
+                    onClick={() => router.push('/profile')}
+                    style={{ width: '10rem' }}
+                  >
+                    Profile
+                  </Button>
+                  <Button
                     onClick={() => router.push('/create-post')}
                     style={{ width: '10rem' }}
                   >

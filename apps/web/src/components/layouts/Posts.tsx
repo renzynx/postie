@@ -15,7 +15,7 @@ import { setPost } from '@features/posts/post.slice';
 const Posts = () => {
   const dispatch = useAppDispatch();
   const pagination = useSelector(selectPagination);
-  const { data, isLoading, isFetching } = useGetPostsQuery(pagination);
+  const { data, isLoading, isFetching, isError } = useGetPostsQuery(pagination);
   const [opened, setOpen] = useState(false);
 
   useEffect(() => {
@@ -40,6 +40,10 @@ const Posts = () => {
             <SkeletonPost />
           </div>
         ))
+      ) : isError ? (
+        <Text align="center" component="h2">
+          There was an error loading posts, please try again later.
+        </Text>
       ) : (
         <div className={styles['posts-container']}>
           {data?.posts.length ? (

@@ -100,7 +100,7 @@ export class UsersService {
       },
     });
 
-    return res.type('txt').send('Email sent.');
+    return res.type('json').send(true).end();
   }
 
   async verifyEmail(token: string, res: Response) {
@@ -126,7 +126,7 @@ export class UsersService {
       return res.type('txt').send('Account already verified.');
     }
 
-    await Promise.all([
+    const [updatedUser] = await Promise.all([
       this.prismaService.user.update({
         where: { id: user.id },
         data: {
@@ -148,6 +148,15 @@ export class UsersService {
       }),
     ]);
 
-    return res.type('txt').send('Email verified.');
+    delete updatedUser.password;
+
+    await this.redis.set(
+      `user:${updatedUser.id}`,
+      JSON.stringify(updatedUser),
+      'EX',
+      60 * 60 * 24
+    );
+
+    return res.redirect(process.env.CORS_ORIGIN + '/profile');
   }
 }
